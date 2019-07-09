@@ -1,0 +1,142 @@
+!
+!  ROMS/TOMS Standard Input parameters.
+!
+! Setting the wp variable: /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic
+! Setting the wp2 variable: /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26
+
+! Application title.
+
+       TITLE = ROMS - NZ Shelf Seas barotropic
+
+! C-preprocessing Flag.
+
+    MyAppCPP = NZSHELF_BAROTROPIC
+
+! Input variable information file name.
+
+     VARNAME == varinfo.dat
+
+! Number of nested grids.
+
+      Ngrids =  1
+
+! Grid dimension parameters. See notes below in the Glossary for how to set
+! these parameters correctly.
+
+          Lm == 908           ! Number of I-direction INTERIOR RHO-points
+          Mm == 540           ! Number of J-direction INTERIOR RHO-points
+           N == 1             ! Number of vertical levels
+
+         NAT =  0             ! Number of active tracers (usually, 2)
+
+! Domain decomposition parameters, [1:Ngrids].
+
+      NtileI == 8
+      NtileJ == 5
+
+! Set lateral boundary conditions keyword. Notice that a value is expected
+! for each boundary segment per nested grid for each state variable.
+!
+!                   W       S       E       N
+!
+!                   1       2       3       4
+
+   LBC(isFsur) ==   Che     Che     Che     Che         ! free-surface
+   LBC(isUbar) ==   Shc     Shc     Shc     Shc         ! 2D U-momentum
+   LBC(isVbar) ==   Shc     Shc     Shc     Shc         ! 2D V-momentum
+
+! Time-Stepping parameters
+!
+! NB: Model run in 50-day chunks
+
+      NTIMES == 720000
+          DT == 6.0d0
+     NDTFAST == 1
+
+! Input/Output parameters.
+
+       NRREC == -1
+   LcycleRST == F
+        NRST == 720000
+       NINFO == 10
+
+! Output history and average files parameters
+!
+! Multiple files now given explicit names--see below
+
+     LDEFOUT == T
+        NAVG == 3600
+        NSTA == 300
+
+! Horizontal viscosity coefficient: [Ngrids].
+
+       VISC4 == 1.0d7                           ! m4/s
+
+! Constants used in momentum stress computation.
+
+       RDRG2 == 3.0d-3                     ! nondimensional
+
+! Time-stamp assigned for model initialization, reference time
+! origin for tidal forcing, and model reference time for output
+! NetCDF units attribute.
+
+      DSTART =  7031.0d0                   ! days
+  TIDE_START =  0.0d0                      ! days
+    TIME_REF =  19900101.0d0               ! yyyymmdd.dd
+
+! Slipperiness parameter: 1.0 (free slip) or -1.0 (no slip)
+
+      GAMMA2 == -1.0D0
+
+! Logical switches (TRUE/FALSE) to increase/decrease horizontal viscosity
+! and/or diffusivity in specific areas of the application domain (like
+! sponge areas) for the desired application grid.
+
+    LuvSponge == F                              ! horizontal momentum
+LtracerSponge == F                              ! temperature, salinity, inert
+
+! Logical switches (TRUE/FALSE) to activate writing of time-averaged
+! fields into AVERAGES output files.
+
+Aout(idUbar) == T       ! ubar               2D U-velocity
+Aout(idVbar) == T       ! vbar               2D V-velocity
+Aout(idFsur) == T       ! zeta               free-surface
+
+! Input NetCDF file names, [1:Ngrids].
+
+     GRDNAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/grd/roms_grd.nc
+     ININAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic/roms_rst_0002.nc
+
+! Input forcing NetCDF file name(s).
+
+     NFFILES == 1
+
+     FRCNAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/frc/yearly/roms_frc_stress_nzlam_1.20_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/frc/yearly/roms_frc_stress_nzlam_1.20_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/frc/yearly/roms_frc_stress_nzlam_1.20_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/frc/yearly/roms_frc_stress_nzlam_1.20_2012.nc
+
+! Output NetCDF file names, [1:Ngrids].
+
+     RSTNAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic/roms_rst_0003.nc
+     HISNAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic/roms_his_0003.nc
+     AVGNAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic/roms_avg_0003.nc
+     STANAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic/roms_sta_0003.nc
+     DIANAME == /nesi/nobackup/niwa00020/hadfield/work/hikurangi/sim26/run/2009-2012-nzlam-1.20-barotropic/roms_dia_0003.nc
+
+     FLTNAME == roms_flt.nc
+     GSTNAME == roms_gst.nc
+     TLMNAME == roms_tlm.nc
+     TLFNAME == roms_tlf.nc
+     ADJNAME == roms_adj.nc
+
+! Input ASCII parameter filenames.
+
+     APARNAM =  roms_ass.in
+     SPOSNAM =  roms_sta.in
+     FPOSNAM =  roms_flt.in
+     BPARNAM =  roms_bio.in
+     SPARNAM =  roms_sed.in
+     USRNAME =  /dev/null
+
+!! The list of variables must be terminated with a comment.

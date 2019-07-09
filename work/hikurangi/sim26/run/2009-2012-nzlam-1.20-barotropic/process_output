@@ -1,0 +1,29 @@
+#! /usr/bin/env bash
+
+set -e
+
+echo Switching to $(workpath)
+cd $(workpath)
+
+for i in "$@"
+do
+
+  s=$(printf %4.4d ${i})
+
+  echo Record-averaging roms_avg_${s}.nc to roms_avg_${s}_a20.nc
+  roms_avg -n 20 roms_avg_${s}.nc
+  echo Packing roms_avg_${s}_a20.nc
+  roms_ncpack6 -O roms_avg_${s}_a20.nc
+
+  echo Packing roms_avg_${s}.nc
+  roms_ncpack6 -O roms_avg_${s}.nc
+
+  echo Packing roms_sta_${s}.nc
+  roms_ncpack6 -O roms_sta_${s}.nc
+  if test ${i} -gt 1
+  then
+    echo Trimming first record from roms_sta_${s}.nc
+    ncks -O -d ocean_time,1, roms_sta_${s}.nc roms_sta_${s}.nc
+  fi
+
+done

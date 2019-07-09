@@ -1,0 +1,70 @@
+!  Station Extraction Parameters.
+!
+! Switch to control the writing of stations data within nested and/or multiple
+! connected grids, [1:Ngrids].
+
+   Lstations == T
+
+! Logical switches (TRUE/FALSE) to activate writing of fields in STATION
+! output file, [Sout(:,ng), ng=1, Ngrids].
+
+Sout(idFsur) == T       ! zeta               free-surface
+Sout(idUbar) == T       ! ubar               2D U-velocity
+Sout(idVbar) == T       ! vbar               2D V-velocity
+
+Sout(idUsms) == T       ! sustr              surface U-stress
+Sout(idVsms) == T       ! svstr              surface V-stress
+
+! Number of stations to process in each nested grid.  These values are
+! essential because the station arrays are dynamically allocated using
+! these values, [1:Ngrids].
+
+    NSTATION ==  32
+
+! Station locations for all grids in any desired order.
+
+POS =  GRID  FLAG      X-POS     Y-POS      COMMENT
+
+        1     1    167.028D0  -47.510D0     Chiswell (1996) West Snares
+        1     1    168.104D0  -47.638D0     Chiswell (1996) East Snares
+        1     1    168.195D0  -46.676D0     Chiswell (1996) Fouveaux Strait
+        1     1    169.881D0  -46.535D0     Chiswell (1996) Nugget Point
+        1     1    171.374D0  -45.284D0     Chiswell (1996) Oamaru
+        1     1    170.057D0  -46.671D0     Outer Nuggets mooring
+        1     1    173.335D0  -43.757D0     Banks Peninsula mooring 2005
+        1     1    174.235D0  -43.746D0     Gilmour & Greig (1992) Mernoo Saddle
+        1     1    170.847D0  -45.998D0     Great South Basin (Cape Saunders) ADP
+        1     1    173.587D0  -42.481D0     Kaikoura mooring 1996
+        1     1    173.708D0  -42.407D0     Kaikoura North mooring 1998
+        1     1    173.668D0  -42.430D0     Kaikoura South mooring 1998
+        1     1    172.890D0  -43.390D0     Pegasus Bay marine farm site
+        1     1    172.7667D0 -43.5167D0    Pegasus Bay ADCP, Reynolds-Fleming and Fleming (2005)
+        1     1    171.8774D0 -44.1170D0    Canterbury Bight Inner ADP
+        1     1    172.0131D0  44.1764D0    Canterbury Bight Outer ADP
+
+        1    1     174.7416D0  -39.9126D0   TTR Site 5
+        1    1     174.2506D0  -39.8030D0   TTR Site 6
+        1    1     174.1938D0  -39.8496D0   TTR Site 7
+        1    1     174.1786D0  -39.9650D0   TTR Site 8
+        1    1     174.0696D0  -39.8875D0   TTR Site 10
+
+        1    1     175.0097D0  -39.9750D0   Whanganui Outfall CM 1999-2000
+
+        1    1     173.4783D0  -39.5200D0   Maui A CM
+
+        1    1     174.4268D0  -41.2086D0   Cook Strait Narrows West
+        1    1     174.5606D0  -41.2439D0   Cook Strait Narrows East
+
+        1    1     174.4604D0  -41.2510D0   Cook Strait Narrows Centre
+
+        1    1     174.5841D0  -41.0964D0   Cook Strait Narrows Fishermans Rock
+
+        1    1     172.2973D0  -40.6624D0   Kahurangi Shoals
+
+        1    1     173.4928D0  -40.6730D0   CSTAG Cook Strait current meter
+        1    1     173.2388D0  -41.0873D0   CSTAG Tasman Bay current meter
+        1    1     172.8783D0  -40.6675D0   CSTAG Golden Bay current meter
+
+        1    1     172.9228D0  -40.6848D0   Golden Bay Metbuoy
+
+! Don't forget the trailing comment!

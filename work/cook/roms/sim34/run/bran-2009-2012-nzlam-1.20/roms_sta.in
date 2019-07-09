@@ -1,0 +1,62 @@
+!  Station Extraction Parameters.
+!
+! Switch to control the writing of stations data within nested and/or multiple
+! connected grids, [1:Ngrids].
+
+   Lstations == T
+
+! Logical switches (TRUE/FALSE) to activate writing of fields in STATION
+! output file, [Sout(:,ng), ng=1, Ngrids].
+
+Sout(idUvel) == T       ! u                  3D U-velocity
+Sout(idVvel) == T       ! v                  3D V-velocity
+Sout(idWvel) == T       ! w                  3D W-velocity
+Sout(idUbar) == T       ! ubar               2D U-velocity
+Sout(idVbar) == T       ! vbar               2D V-velocity
+Sout(idFsur) == T       ! zeta               free-surface
+
+Sout(idTvar) == T T     ! temp, salt         all (NT) tracers
+
+Sout(idMtke) == T       ! tke                turbulent kinetic energy
+Sout(idMtls) == T       ! gls                turbulent length scale
+
+
+! Number of stations to process in each nested grid.  These values are
+! essential because the station arrays are dynamically allocated using
+! these values, [1:Ngrids].
+
+    NSTATION == 17
+
+! Station locations
+
+POS =  GRID FLAG     X-POS        Y-POS       COMMENT
+
+    1    1     174.7416D0  -39.9126D0     ! TTR Site 5
+    1    1     174.2506D0  -39.8030D0     ! TTR Site 6
+    1    1     174.1938D0  -39.8496D0     ! TTR Site 7
+    1    1     174.1786D0  -39.9650D0     ! TTR Site 8
+    1    1     174.0696D0  -39.8875D0     ! TTR Site 10
+
+    1    1     175.0050D0  -39.9812D0     ! Whanganui Outfall CM
+
+    1    1     173.4783D0  -39.5200D0     ! Maui A CM
+
+    1    1     174.4268D0  -41.2086D0     ! Cook Strait Narrows West
+    1    1     174.5606D0  -41.2439D0     ! Cook Strait Narrows East
+
+    1    1     174.4604D0  -41.2510D0     ! Cook Strait Narrows Centre
+
+    1    1     174.5841D0  -41.0964D0     ! Cook Strait Narrows Fishermans Rock
+
+    1    1     172.2973D0  -40.6624D0     ! Kahurangi Shoals
+
+    1    1     173.4928D0  -40.6730D0     ! CSTAG Cook Strait current meter
+    1    1     173.2388D0  -41.0873D0     ! CSTAG Tasman Bay current meter
+    1    1     172.8783D0  -40.6675D0     ! CSTAG Golden Bay current meter
+
+    1    1    174.3418D0   -41.2825D0     ! Potential aquaculture site
+
+
+    1    1     172.9228D0  -40.6848D0     ! Golden Bay Metbuoy
+
+! The list of stations must be terminated by a comment

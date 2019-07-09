@@ -1,0 +1,274 @@
+!
+!  ROMS/TOMS Standard Input parameters.
+!
+! Setting the wp variable: /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20
+! Setting the wp2 variable: /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34
+
+! Application title.
+
+       TITLE = ROMS - Cook Strait
+
+! C-preprocessing Flag.
+
+    MyAppCPP = GREATER_COOK
+
+! Input variable information file name.
+
+     VARNAME == varinfo.dat
+
+! Number of nested grids.
+
+      Ngrids =  1
+
+! Grid dimension parameters. See notes below in the Glossary for how to set
+! these parameters correctly.
+
+          Lm == 480           ! Number of I-direction INTERIOR RHO-points
+          Mm == 240           ! Number of J-direction INTERIOR RHO-points
+           N == 20            ! Number of vertical levels
+
+         NAT =  2             ! Number of active tracers (usually, 2)
+
+! Domain decomposition parameters, [1:Ngrids].
+
+      NtileI == 8
+      NtileJ == 5
+
+! Set lateral boundary conditions keyword. Notice that a value is expected
+! for each boundary segment per nested grid for each state variable.
+!
+!                   W       S       E       N
+!
+!                   1       2       3       4
+
+   LBC(isFsur) ==   Che     Che     Che     Che         ! free-surface
+   LBC(isUbar) ==   Shc     Shc     Shc     Shc         ! 2D U-momentum
+   LBC(isVbar) ==   Shc     Shc     Shc     Shc         ! 2D V-momentum
+   LBC(isUvel) ==   RadNud  RadNud  RadNud  RadNud      ! 3D U-momentum
+   LBC(isVvel) ==   RadNud  RadNud  RadNud  RadNud      ! 3D V-momentum
+   LBC(isMtke) ==   Gra     Gra     Gra     Gra         ! mixing TKE
+
+   LBC(isTvar) ==   RadNud  RadNud  RadNud  RadNud      ! temperature, salinity
+
+! Time-Stepping parameters
+!
+! NB: Model run in 50-day chunks
+
+      NTIMES == 57600
+          DT == 75.0d0
+     NDTFAST == 20
+
+! Input/Output parameters.
+
+       NRREC == -1
+   LcycleRST == F
+        NRST == 57600
+       NINFO == 1
+
+! Output history and average files parameters
+!
+! Multiple files now given explicit names--see below
+
+     LDEFOUT == T
+        NHIS == 48
+        NAVG == 576
+        NSTA == 24
+
+! Generic length-scale turbulence closure parameters.
+
+       GLS_P == -1.0d0           ! K-omega
+       GLS_M ==  0.5d0
+       GLS_N == -1.0d0
+    GLS_Kmin ==  7.6d-6
+    GLS_Pmin ==  1.0d-12
+
+    GLS_CMU0 ==  0.5477d0
+      GLS_C1 ==  0.555d0
+      GLS_C2 ==  0.833d0
+     GLS_C3M == -0.6d0
+     GLS_C3P ==  1.0d0
+    GLS_SIGK ==  2.0d0
+    GLS_SIGP ==  2.0d0
+
+! Constants used in momentum stress computation. A roughness length
+! of 0.4 mm is suitable for an unrippled sand bed and corresponds to
+! a C100 (drag coefficient applicable to current at 1 m) of 2.6E-3
+! (see Soulsby, Dynamics of Marine Sands, 1997, Table 7, p 49)
+
+         Zob == 0.4d-3                     ! m
+
+! Jerlov water type.
+
+       WTYPE == 4
+
+! Set vertical, terrain-following coordinates transformation equation and
+! stretching function (see below for details), [1:Ngrids].
+
+  Vtransform == 2                          ! transformation equation
+ Vstretching == 4                          ! stretching function
+
+! Vertical S-coordinates parameters, [1:Ngrids].
+
+     THETA_S == 4.0d0                      !
+     THETA_B == 2.0d0                      !
+      TCLINE == 20.0d0                     ! m
+
+! Mean Density
+
+        RHO0 =  1025.0d0                   ! kg/m3
+
+! Time-stamp assigned for model initialization, reference time
+! origin for tidal forcing, and model reference time for output
+! NetCDF units attribute.
+
+      DSTART =  7031.0d0                   ! days
+  TIDE_START =  0.0d0                      ! days
+    TIME_REF =  19900101.0d0               ! yyyymmdd.dd
+
+! Nudging/relaxation time scales, inverse scales will be computed
+! internally. TNUDG is dimensioned [1:NT,1:Ngrids], others [1:Ngrids].
+
+       TNUDG == 2.5d0                      ! days
+      M3NUDG == 2.5d0                      ! days
+
+      OBCFAC == 2.5d0                      ! nondimensional
+
+! Slipperiness parameter: 1.0 (free slip) or -1.0 (no slip)
+
+      GAMMA2 == -1.0D0
+
+! Logical switches (TRUE/FALSE) to increase/decrease horizontal viscosity
+! and/or diffusivity in specific areas of the application domain (like
+! sponge areas) for the desired application grid.
+
+    LuvSponge == F                              ! horizontal momentum
+LtracerSponge == F                              ! temperature, salinity, inert
+
+! Logical switches (TRUE/FALSE) to activate horizontal momentum transport
+! point Sources/Sinks (like river runoff transport) and mass point
+! Sources/Sinks (like volume vertical influx)
+
+      LuvSrc == T                          ! horizontal momentum transport
+       LwSrc == F                          ! volume vertical influx
+
+! Logical switches (TRUE/FALSE) to activate tracers point Sources/Sinks
+
+  LtracerSrc == T                          ! temperature, salinity, inert
+
+! Logical switches (TRUE/FALSE) to read and process climatology fields.
+
+      Lm3CLM == T                          ! 3D momentum
+  LtracerCLM == T                          ! temperature, salinity, inert
+
+! Logical switches (TRUE/FALSE) to nudge the desired climatology field(s).
+
+ LnudgeM3CLM == T                          ! 3D momentum
+  LnudgeTCLM == T                          ! temperature, salinity, inert
+
+! Logical switches (TRUE/FALSE) to activate writing of snapshot
+! fields into HISTORY output files.
+
+Hout(idUvel) == T       ! u                  3D U-velocity
+Hout(idVvel) == T       ! v                  3D V-velocity
+Hout(idUbar) == T       ! ubar               2D U-velocity
+Hout(idVbar) == T       ! vbar               2D V-velocity
+Hout(idFsur) == T       ! zeta               free-surface
+
+! Logical switches (TRUE/FALSE) to activate writing of time-averaged
+! fields into AVERAGES output files.
+
+Aout(idUvel) == T       ! u                  3D U-velocity
+Aout(idVvel) == T       ! v                  3D V-velocity
+Aout(idWvel) == T       ! w                  3D W-velocity
+Aout(idUbar) == T       ! ubar               2D U-velocity
+Aout(idVbar) == T       ! vbar               2D V-velocity
+Aout(idFsur) == T       ! zeta               free-surface
+
+Aout(idTvar) == T       ! temp, salt         temperature and salinity
+
+! Input NetCDF file names, [1:Ngrids].
+!
+! The initialisation file, roms_rst_0000.nc, is a copy
+! of $(workpath ../..)/ini/bran/roms_ini_2009-04-02.nc
+
+     GRDNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/grd/roms_grd.nc
+     ININAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20/roms_rst_0021.nc
+
+! Input lateral boundary conditions and climatology file names.
+
+     BRYNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_bry_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_bry_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_bry_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_bry_2012.nc
+
+     CLMNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_clm_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_clm_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_clm_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/clm/bran-yearly/roms_clm_2012.nc
+
+! Input climatology nudging coefficients file name.
+
+     NUDNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/nud/b/roms_nud.nc
+
+! Input Sources/Sinks forcing (like river runoff) file name.
+
+     SSFNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/fixed/roms_frc_river.nc
+
+! Input tidal forcing file name.
+
+    TIDENAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/fixed/roms_frc_tide.nc
+
+! Input forcing NetCDF file name(s).
+
+     NFFILES == 5
+
+     FRCNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_stress_nzlam_1.20_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_stress_nzlam_1.20_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_stress_nzlam_1.20_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_stress_nzlam_1.20_2012.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_stress_nzlam_1.20_2013.nc \
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_sst_oisst_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_sst_oisst_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_sst_oisst_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_sst_oisst_2012.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_sst_oisst_2013.nc \
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_shflux_ncep_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_shflux_ncep_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_shflux_ncep_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_shflux_ncep_2012.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_shflux_ncep_2013.nc \
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swflux_ncep_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swflux_ncep_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swflux_ncep_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swflux_ncep_2012.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swflux_ncep_2013.nc \
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swrad_ncep_2009.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swrad_ncep_2010.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swrad_ncep_2011.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swrad_ncep_2012.nc |
+                /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/frc/yearly/roms_frc_swrad_ncep_2013.nc
+
+! Output NetCDF file names, [1:Ngrids].
+
+     RSTNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20/roms_rst_0022.nc
+     HISNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20/roms_his_0022.nc
+     AVGNAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20/roms_avg_0022.nc
+     STANAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20/roms_sta_0022.nc
+     DIANAME == /nesi/nobackup/niwa00020/hadfield/work/cook/roms/sim34/run/bran-2009-2012-nzlam-1.20/roms_dia_0022.nc
+
+     FLTNAME == roms_flt.nc
+     GSTNAME == roms_gst.nc
+     TLMNAME == roms_tlm.nc
+     TLFNAME == roms_tlf.nc
+     ADJNAME == roms_adj.nc
+
+! Input ASCII parameter filenames.
+
+     APARNAM =  roms_ass.in
+     SPOSNAM =  roms_sta.in
+     FPOSNAM =  roms_flt.in
+     BPARNAM =  roms_bio.in
+     SPARNAM =  roms_sed.in
+     USRNAME =  /dev/null
+
+!! The list of variables must be terminated with a comment.
