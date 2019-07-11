@@ -1,0 +1,44 @@
+#! /usr/bin/env python3
+
+"""Given a path in the HPCF project area, return the corresponding path in the
+nobackup area."""
+
+# MGH 2018-10:
+#   - Written as part of a new approach to storing simulations on the Maui file
+#     systems.
+# MGH 2019-04-03:
+#   - The script now prints shorter and more human-readable paths, eg.
+#     "/scale_wlg_nobackup/filesets/nobackup" is now rendered as its shorter
+#     equivalent, "/nesi/nobackup"
+
+import sys
+import os
+import argparse
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    ap.add_argument('path', nargs='?', default='.',
+        help='The path to be converted')
+    ap.add_argument('-r', '--reverse', dest='rev',
+        action='store_true', default=False,
+        help='Perform the reverse transformation')
+    args = ap.parse_args()
+    try:
+        abspath = os.path.abspath(args.path)
+        if args.rev:
+            result = abspath. \
+                replace('/nesi/nobackup', '/nesi/project', 1). \
+                replace('/scale_wlg_nobackup/filesets/nobackup', '/nesi/project', 1)
+        else:
+            result = abspath. \
+                replace('/nesi/project', '/nesi/nobackup', 1). \
+                replace('/scale_wlg_persistent/filesets/project', '/nesi/nobackup', 1)
+        print(result)
+    except OSError as err:
+        _, strerr = err.args
+        sys.exit(strerr)
+
+if __name__ == '__main__':
+    main()
+

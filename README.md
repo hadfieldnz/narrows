@@ -4,7 +4,7 @@ This repository contains data files (but not the big ones) and documentation in 
 research paper "A modelling synthesis of subtidal transport through Cook Strait" submitted by
 Hadfield &amp; Stevens to the New Zealand Journal of Marine and Freshwater Research, July 2019.
 
-## Simulation input and output files #
+## Simulation input and output files ##
 
 The following directories point to the simulations listed in Table 1 of the paper:
 
@@ -39,3 +39,21 @@ Each of the simulation directories contains the following
   model. The commits all exist on Git Hub.com and can be searched for there.
 * A ROMS [varinfo.dat](https://www.myroms.org/wiki/varinfo.dat) file.
 * A script, process_output to post-process the ROMS output.
+
+## Scripts ##
+
+The scripts subdirectory contains a script called workpath.If you look at any of the roms.in
+template files from the simulations above, you will see that near the top there are lines like the following
+
+```
+! Setting the wp variable: <<<wp = run('workpath')>>><<wp>>
+! Setting the wp2 variable: <<<wp2 = run('workpath ../..')>>><<wp2>>
+```
+
+These define a couple of Python variables that are substituted into the file names later in the file with Python expressions like this
+```
+     GRDNAME == <<"{}/grd/roms_grd.nc".format(wp2)>>
+```
+
+The workpath script, which is called here, takes a file name in the area on Maui from which the model is run (/nesi/project) and converts it into a file name in the area that is suitable for storing large files (/nesi/nobackup). The latter is, as the name suggests, not backed up
+and is suitable for very large files. If you look at any of the numbered ROMS input files (rom001.in, etc) you can see the results of this conversion.
